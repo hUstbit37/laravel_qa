@@ -5,6 +5,8 @@ namespace App;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use PhpParser\Node\Expr\FuncCall;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -36,4 +38,15 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function questions()
+    {
+        return $this->hasMany('App\Question');
+    }
+
+    public function setTitleAttribute($value) //define the default values for some of your model's attributes
+    {
+        $this->attributes['title'] = $value;
+        $this->attributes['slug'] = Str::slug($value); //Str::slug('My slug Go', '-'); output: my-slug-go
+    }
 }
